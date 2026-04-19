@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} — Orbit Foods{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'store:product_list' %}" class="text-success text-decoration-none">Store</a></li>
+      {% if product.category %}
+        <li class="breadcrumb-item text-muted">{{ product.category.name }}</li>
+      {% endif %}
+      <li class="breadcrumb-item active">{{ product.name }}</li>
+    </ol>
+  </nav>
+
+  <div class="row g-5">
+    <!-- Product Image -->
+    <div class="col-md-5">
+      <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" class="w-100" alt="{{ product.name }}" style="max-height:420px;object-fit:cover;">
+        {% else %}
+          <div class="d-flex align-items-center justify-content-center bg-light" style="height:420px;">
+            <span style="font-size:8rem;">🥗</span>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Product Info -->
+    <div class="col-md-7">
+      <span class="badge bg-success-subtle text-success mb-2">{{ product.category.name|default:"General" }}</span>
+      <h2 class="fw-bold mb-2">{{ product.name }}</h2>
+      <h3 class="text-success fw-bold mb-3">৳{{ product.price }}</h3>
+
+      <p class="text-muted mb-4">{{ product.description }}</p>
+
+      <!-- Stock indicator -->
+      {% if product.is_in_stock %}
+        <p class="text-success mb-3"><i class="bi bi-check-circle-fill me-2"></i>In Stock ({{ product.stock_quantity }} available)</p>
+      {% else %}
+        <p class="text-danger mb-3"><i class="bi bi-x-circle-fill me-2"></i>Out of Stock</p>
+      {% endif %}
+
+      <!-- Add to Cart -->
+      {% if user.is_authenticated %}
+        {% if product.is_in_stock %}
+          <form method="post" action="{% url 'store:add_to_cart' product.id %}" class="d-flex align-items-center gap-3">
+            {% csrf_token %}
+            <div class="d-flex align-items-center border rounded-3 overflow-hidden">
+              <button type="button" class="btn btn-light px-3 qty-btn" data-action="decrease">−</button>
+              <input type="number" name="quantity" value="1" min="1" max="{{ product.stock_quantity }}"
+                     class="form-control text-center border-0 qty-input" style="width:70px;" id="qtyInput">
+              <button type="button" class="btn btn-light px-3 qty-btn" data-action="increase">+</button>
+            </div>
+            <button type="submit" class="btn btn-success btn-lg px-5 fw-semibold">
+              <i class="bi bi-cart-plus me-2"></i>Add to Cart
+            </button>
+          </form>
+        {% else %}
+          <button class="btn btn-secondary btn-lg px-5" disabled>Out of Stock</button>
+        {% endif %}
+      {% else %}
+        <a href="{% url 'accounts:login' %}" class="btn btn-success btn-lg px-5 fw-semibold">
+          <i class="bi bi-box-arrow-in-right me-2"></i>Login to Buy
+        </a>
+      {% endif %}
+
+      <p class="text-muted small mt-4">
+        <i class="bi bi-calendar3 me-1"></i>Added {{ product.created_at|date:"F d, Y" }}
+      </p>
+    </div>
+  </div>
+</div>
+
+{% block extra_js %}
+<script>
+  document.querySelectorAll('.qty-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const input = document.getElementById('qtyInput');
+      let val = parseInt(input.value) || 1;
+      const max = parseInt(input.max) || 999;
+      if (btn.dataset.action === 'increase' && val < max) input.value = val + 1;
+      if (btn.dataset.action === 'decrease' && val > 1) input.value = val - 1;
+    });
+  });
+</script>
+{% endblock %}
+{% endblock %}

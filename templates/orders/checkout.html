@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}Checkout — Orbit Foods{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h3 class="fw-bold mb-4"><i class="bi bi-bag-check me-2 text-success"></i>Checkout</h3>
+
+  <div class="row g-4">
+
+    <!-- Shipping Form -->
+    <div class="col-lg-7">
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4">
+          <h5 class="fw-semibold mb-4">Shipping Details</h5>
+          <form method="post" action="{% url 'orders:place_order' %}" id="checkoutForm">
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold small">Full Name *</label>
+              <input type="text" name="shipping_name" class="form-control" required
+                     value="{{ initial_data.shipping_name }}" placeholder="Your full name">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold small">Email Address *</label>
+              <input type="email" name="shipping_email" class="form-control" required
+                     value="{{ initial_data.shipping_email }}" placeholder="Invoice will be sent here">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold small">Phone Number *</label>
+              <input type="text" name="shipping_phone" class="form-control" required
+                     value="{{ initial_data.shipping_phone }}" placeholder="Contact number">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold small">Delivery Address *</label>
+              <textarea name="shipping_address" class="form-control" rows="3" required
+                        placeholder="Full delivery address">{{ initial_data.shipping_address }}</textarea>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-semibold small">Order Notes (optional)</label>
+              <textarea name="notes" class="form-control" rows="2" placeholder="Any special instructions?"></textarea>
+            </div>
+
+            <div class="alert alert-info py-2 small">
+              <i class="bi bi-envelope me-2"></i>
+              A PDF invoice will be automatically emailed to you after order confirmation.
+            </div>
+
+            <button type="submit" class="btn btn-success w-100 fw-semibold py-3 fs-5">
+              <i class="bi bi-check-circle me-2"></i>Confirm Order
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="col-lg-5">
+      <div class="card border-0 shadow-sm rounded-4 sticky-top" style="top:80px;">
+        <div class="card-body p-4">
+          <h5 class="fw-semibold mb-3">Order Summary</h5>
+          {% for item in items %}
+          <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-success rounded-pill">{{ item.quantity }}</span>
+              <span class="small fw-semibold">{{ item.product.name }}</span>
+            </div>
+            <span class="small fw-semibold text-success">৳{{ item.get_subtotal }}</span>
+          </div>
+          {% endfor %}
+          <div class="d-flex justify-content-between fw-bold fs-5 mt-3">
+            <span>Total</span>
+            <span class="text-success">৳{{ cart.get_total_price }}</span>
+          </div>
+          <p class="text-muted small mt-2 mb-0">
+            <i class="bi bi-truck me-1"></i>Free delivery included
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

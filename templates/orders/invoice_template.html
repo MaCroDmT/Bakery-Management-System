@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        font-size: 13px;
+        color: #333;
+        padding: 40px;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 3px solid #2d6a4f;
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+      }
+      .company-name {
+        font-size: 28px;
+        font-weight: bold;
+        color: #2d6a4f;
+      }
+      .company-tagline {
+        color: #666;
+        font-size: 12px;
+        margin-top: 4px;
+      }
+
+      .invoice-meta {
+        text-align: right;
+      }
+      .invoice-title {
+        font-size: 22px;
+        font-weight: bold;
+        color: #2d6a4f;
+        text-transform: uppercase;
+      }
+      .invoice-number {
+        font-size: 14px;
+        font-weight: bold;
+        margin-top: 5px;
+      }
+      .invoice-date {
+        color: #666;
+        font-size: 12px;
+      }
+
+      .billing-section {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 30px;
+      }
+      .billing-block h4 {
+        font-size: 11px;
+        text-transform: uppercase;
+        color: #888;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+      }
+      .billing-block p {
+        margin: 2px 0;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      thead th {
+        background: #2d6a4f;
+        color: white;
+        padding: 10px 12px;
+        text-align: left;
+        font-size: 12px;
+      }
+      tbody tr:nth-child(even) {
+        background: #f8f9fa;
+      }
+      tbody td {
+        padding: 10px 12px;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .totals-table {
+        width: 300px;
+        margin-left: auto;
+      }
+      .totals-table td {
+        padding: 6px 12px;
+      }
+      .totals-table .total-row {
+        font-weight: bold;
+        font-size: 15px;
+        border-top: 2px solid #2d6a4f;
+        color: #2d6a4f;
+      }
+
+      .footer {
+        margin-top: 50px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+        text-align: center;
+        color: #999;
+        font-size: 11px;
+      }
+
+      .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: bold;
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <div class="header">
+      <div>
+        <img
+          src="{{ logo_url }}"
+          alt="Orbit Foods"
+          style="height: 70px; object-fit: contain"
+        />
+        <div class="company-name">Orbit Foods</div>
+        <div class="company-tagline">Premium Quality Food Products</div>
+        <div class="company-tagline">
+          Dhaka, Bangladesh |
+          <a
+            href="/cdn-cgi/l/email-protection"
+            class="__cf_email__"
+            data-cfemail="7f0f0d100b0b10060c4d473f18121e1613511c1012"
+            >[email&#160;protected]</a
+          >
+        </div>
+      </div>
+      <div class="invoice-meta">
+        <div class="invoice-title">Invoice</div>
+        <div class="invoice-number"># {{ order.invoice_number }}</div>
+        <div class="invoice-date">
+          Date: {{ order.created_at|date:"F d, Y" }}
+        </div>
+        <div style="margin-top: 8px">
+          <span class="status-badge">{{ order.get_status_display }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Billing Info -->
+    <div class="billing-section">
+      <div class="billing-block">
+        <h4>Bill To</h4>
+        <p><strong>{{ order.shipping_name }}</strong></p>
+        <p>{{ order.shipping_email }}</p>
+        <p>{{ order.shipping_phone }}</p>
+        <p>{{ order.shipping_address }}</p>
+      </div>
+      <div class="billing-block" style="text-align: right">
+        <h4>From</h4>
+        <p><strong>Orbit Foods</strong></p>
+        <p>
+          <a
+            href="/cdn-cgi/l/email-protection"
+            class="__cf_email__"
+            data-cfemail="4e3e3c213a3a21373d7c760e29232f2722602d2123"
+            >[email&#160;protected]</a
+          >
+        </p>
+        <p>Dhaka, Bangladesh</p>
+      </div>
+    </div>
+
+    <!-- Order Items Table -->
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 40px">#</th>
+          <th>Product Name</th>
+          <th style="width: 120px">Unit Price</th>
+          <th style="width: 80px; text-align: center">Qty</th>
+          <th style="width: 120px; text-align: right">Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in order.items.all %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ item.product_name }}</td>
+          <td>৳{{ item.product_price }}</td>
+          <td style="text-align: center">{{ item.quantity }}</td>
+          <td style="text-align: right; font-weight: bold">
+            ৳{{ item.get_subtotal }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Totals -->
+    <table class="totals-table">
+      <tr>
+        <td>Subtotal</td>
+        <td style="text-align: right">৳{{ order.total_price }}</td>
+      </tr>
+      <tr>
+        <td>Delivery</td>
+        <td style="text-align: right">Free</td>
+      </tr>
+      <tr class="total-row">
+        <td>Total</td>
+        <td style="text-align: right">৳{{ order.total_price }}</td>
+      </tr>
+    </table>
+
+    {% if order.notes %}
+    <div
+      style="
+        margin-top: 20px;
+        padding: 12px;
+        background: #fff3cd;
+        border-radius: 6px;
+        border: 1px solid #ffc107;
+      "
+    >
+      <strong>Order Notes:</strong> {{ order.notes }}
+    </div>
+    {% endif %}
+  </body>
+</html>

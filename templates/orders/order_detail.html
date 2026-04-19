@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Order {{ order.invoice_number }} — Orbit Foods{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold mb-0">Order Details</h4>
+    <a href="{% url 'orders:download_invoice' order.pk %}" class="btn btn-outline-success">
+      <i class="bi bi-download me-2"></i>Download Invoice
+    </a>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-8">
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4">
+          <h6 class="fw-semibold mb-3">Items Ordered</h6>
+          <div class="table-responsive">
+            <table class="table align-middle">
+              <thead class="table-light">
+                <tr><th>Product</th><th>Unit Price</th><th>Qty</th><th class="text-end">Subtotal</th></tr>
+              </thead>
+              <tbody>
+                {% for item in order.items.all %}
+                <tr>
+                  <td class="fw-semibold">{{ item.product_name }}</td>
+                  <td>৳{{ item.product_price }}</td>
+                  <td>{{ item.quantity }}</td>
+                  <td class="text-end fw-bold text-success">৳{{ item.get_subtotal }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+              <tfoot>
+                <tr><td colspan="3" class="text-end fw-bold">Total</td><td class="text-end fw-bold text-success fs-5">৳{{ order.total_price }}</td></tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm rounded-4 mb-3">
+        <div class="card-body p-4">
+          <h6 class="fw-semibold mb-3">Order Info</h6>
+          <table class="table table-borderless small mb-0">
+            <tr><th class="text-muted">Invoice #</th><td class="fw-semibold text-success">{{ order.invoice_number }}</td></tr>
+            <tr><th class="text-muted">Status</th><td><span class="badge bg-{{ order.get_status_badge_color }}">{{ order.get_status_display }}</span></td></tr>
+            <tr><th class="text-muted">Date</th><td>{{ order.created_at|date:"M d, Y" }}</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4">
+          <h6 class="fw-semibold mb-3">Shipping To</h6>
+          <p class="small mb-1 fw-semibold">{{ order.shipping_name }}</p>
+          <p class="small text-muted mb-1">{{ order.shipping_email }}</p>
+          <p class="small text-muted mb-1">{{ order.shipping_phone }}</p>
+          <p class="small text-muted mb-0">{{ order.shipping_address }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a href="{% url 'orders:order_history' %}" class="btn btn-outline-secondary mt-3">← My Orders</a>
+</div>
+{% endblock %}

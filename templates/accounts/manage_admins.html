@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Manage Admins — Orbit Foods{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold mb-0">Administrator Accounts</h4>
+    <a href="{% url 'accounts:create_admin' %}" class="btn btn-success">
+      <i class="bi bi-person-plus me-2"></i>Add Admin
+    </a>
+  </div>
+  <div class="card border-0 shadow-sm rounded-4">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th class="px-4 py-3">Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Role</th>
+            <th>Joined</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for admin in admins %}
+          <tr>
+            <td class="px-4 fw-semibold">{{ admin.get_full_name }}</td>
+            <td>{{ admin.email }}</td>
+            <td>{{ admin.phone|default:"—" }}</td>
+            <td>
+              <span class="badge {% if admin.role == 'superadmin' %}bg-danger{% else %}bg-primary{% endif %}">
+                {{ admin.role|capfirst }}
+              </span>
+            </td>
+            <td class="text-muted small">{{ admin.date_joined|date:"M d, Y" }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="5" class="text-center text-muted py-4">No admins found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <a href="{% url 'accounts:admin_dashboard' %}" class="btn btn-outline-secondary mt-3">← Dashboard</a>
+</div>
+{% endblock %}

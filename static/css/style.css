@@ -1,0 +1,167 @@
+/* ── Orbit Foods — Custom CSS ── */
+
+/* Global */
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f8f9fa;
+}
+
+/* Navbar */
+.bg-orbit {
+  background-color: #1a472a !important;
+}
+
+/* Product Cards */
+.product-card {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  border-radius: 16px !important;
+}
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+.product-img {
+  height: 220px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.product-img-placeholder {
+  height: 220px;
+  width: 100%;
+}
+
+/* Rounded corners everywhere */
+.rounded-4 {
+  border-radius: 16px !important;
+}
+.rounded-3 {
+  border-radius: 12px !important;
+}
+
+/* Buttons */
+.btn-success {
+  background-color: #2d6a4f;
+  border-color: #2d6a4f;
+}
+.btn-success:hover {
+  background-color: #1a472a;
+  border-color: #1a472a;
+}
+.btn-outline-success {
+  color: #2d6a4f;
+  border-color: #2d6a4f;
+}
+.btn-outline-success:hover {
+  background-color: #2d6a4f;
+  border-color: #2d6a4f;
+}
+
+/* Badge subtle colors (Bootstrap 5.3 may not have these) */
+.bg-success-subtle {
+  background-color: #d1e7dd !important;
+}
+.bg-warning-subtle {
+  background-color: #fff3cd !important;
+}
+.bg-danger-subtle {
+  background-color: #f8d7da !important;
+}
+.bg-info-subtle {
+  background-color: #cff4fc !important;
+}
+.bg-primary-subtle {
+  background-color: #cfe2ff !important;
+}
+.text-success {
+  color: #2d6a4f !important;
+}
+
+/* Cart Badge */
+.navbar .badge {
+  font-size: 0.6rem;
+}
+
+/* Form Controls */
+.form-control:focus,
+.form-select:focus {
+  border-color: #2d6a4f;
+  box-shadow: 0 0 0 0.2rem rgba(45, 106, 79, 0.2);
+}
+
+/* Alert colors mapping */
+.alert-success {
+  background-color: #d1e7dd;
+  border-color: #badbcc;
+  color: #0a3622;
+}
+.alert-error,
+.alert-danger {
+  background-color: #f8d7da;
+  border-color: #f5c2c7;
+  color: #842029;
+}
+.alert-warning {
+  background-color: #fff3cd;
+  border-color: #ffecb5;
+  color: #664d03;
+}
+.alert-info {
+  background-color: #cff4fc;
+  border-color: #b6effb;
+  color: #055160;
+}
+
+/* OTP input */
+input[name="code"] {
+  font-size: 2rem;
+  letter-spacing: 0.8rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Hero Section */
+.hero-section {
+  background-attachment: fixed;
+}
+
+/* Tables */
+.table th {
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+}
+
+/* Sticky sidebar */
+.sticky-top {
+  top: 80px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #2d6a4f;
+  border-radius: 3px;
+}
+
+/* Fix navbar always on top */
+.navbar.sticky-top {
+  z-index: 9999 !important;
+  position: sticky !important;
+  top: 0 !important;
+}
+
+/* Fix hero section not overlapping navbar */
+.hero-section {
+  position: relative;
+  z-index: 1;
+}

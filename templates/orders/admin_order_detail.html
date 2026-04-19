@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}Order {{ order.invoice_number }} — Admin{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold mb-0">Order: <span class="text-success">{{ order.invoice_number }}</span></h4>
+    <a href="{% url 'orders:admin_download_invoice' order.pk %}" class="btn btn-outline-success">
+      <i class="bi bi-download me-2"></i>Download Invoice PDF
+    </a>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-8">
+      <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-4">
+          <h6 class="fw-semibold mb-3">Items</h6>
+          <table class="table align-middle">
+            <thead class="table-light"><tr><th>Product</th><th>Unit Price</th><th>Qty</th><th class="text-end">Subtotal</th></tr></thead>
+            <tbody>
+              {% for item in order.items.all %}
+              <tr>
+                <td class="fw-semibold">{{ item.product_name }}</td>
+                <td>৳{{ item.product_price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td class="text-end text-success fw-bold">৳{{ item.get_subtotal }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            <tfoot>
+              <tr><td colspan="3" class="text-end fw-bold">Order Total</td><td class="text-end fw-bold text-success fs-5">৳{{ order.total_price }}</td></tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <!-- Update Status Form -->
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4">
+          <h6 class="fw-semibold mb-3">Update Order Status</h6>
+          <form method="post" class="d-flex align-items-center gap-3">
+            {% csrf_token %}
+            <select name="status" class="form-select" style="max-width:240px;">
+              {% for val, label in status_choices %}
+                <option value="{{ val }}" {% if order.status == val %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-success px-4 fw-semibold">
+              <i class="bi bi-check-circle me-2"></i>Update Status
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm rounded-4 mb-3">
+        <div class="card-body p-4">
+          <h6 class="fw-semibold mb-3">Customer Details</h6>
+          <p class="small mb-1 fw-semibold">{{ order.shipping_name }}</p>
+          <p class="small text-muted mb-1"><i class="bi bi-envelope me-1"></i>{{ order.shipping_email }}</p>
+          <p class="small text-muted mb-1"><i class="bi bi-telephone me-1"></i>{{ order.shipping_phone }}</p>
+          <p class="small text-muted mb-0"><i class="bi bi-geo-alt me-1"></i>{{ order.shipping_address }}</p>
+        </div>
+      </div>
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body p-4">
+          <h6 class="fw-semibold mb-3">Order Info</h6>
+          <table class="table table-borderless small mb-0">
+            <tr><th class="text-muted">Date</th><td>{{ order.created_at|date:"M d, Y g:i A" }}</td></tr>
+            <tr><th class="text-muted">Invoice Sent</th><td>{% if order.invoice_sent %}<span class="text-success">✓ Yes</span>{% else %}<span class="text-danger">✗ No</span>{% endif %}</td></tr>
+            {% if order.notes %}<tr><th class="text-muted">Notes</th><td>{{ order.notes }}</td></tr>{% endif %}
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a href="{% url 'orders:admin_orders' %}" class="btn btn-outline-secondary mt-3">← All Orders</a>
+</div>
+{% endblock %}

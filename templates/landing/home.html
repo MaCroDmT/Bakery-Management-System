@@ -1,0 +1,344 @@
+{% extends 'base.html' %} {% load static %} {% block title %}Orbit Foods —
+Quality Food Products{% endblock %} {% block content %}
+
+<!-- ── Hero Section ── -->
+<section
+  class="hero-section d-flex align-items-center"
+  style="
+    min-height: 90vh;
+    background: linear-gradient(135deg, #1a472a 0%, #2d6a4f 50%, #40916c 100%);
+  "
+>
+  <div class="container text-center text-white py-5">
+    <img
+      src="{% static 'images/logo.png' %}"
+      alt="Orbit Foods Logo"
+      style="height: 120px; object-fit: contain"
+      class="mb-4"
+    />
+    <h1 class="display-3 fw-bold mb-3">
+      Welcome to <span class="text-warning">Orbit Foods</span>
+    </h1>
+    <p class="lead fs-4 mb-4 opacity-75">
+      Premium quality food products — grown with care, delivered with love.
+    </p>
+    <div class="d-flex gap-3 justify-content-center flex-wrap">
+      <a
+        href="{% url 'store:product_list' %}"
+        class="btn btn-warning btn-lg px-5 fw-bold shadow"
+      >
+        <i class="bi bi-shop me-2"></i>Shop Now
+      </a>
+      <a href="#about" class="btn btn-outline-light btn-lg px-5">
+        <i class="bi bi-info-circle me-2"></i>Learn More
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── About Section ── -->
+<section id="about" class="py-5 bg-light">
+  <div class="row g-3 mt-2">
+    <div class="col-4 text-center">
+      <div class="bg-success text-white rounded-3 p-3">
+        <h3 class="fw-bold mb-0">500+</h3>
+        <small>Products</small>
+      </div>
+    </div>
+    <div class="col-4 text-center">
+      <div class="bg-warning text-dark rounded-3 p-3">
+        <h3 class="fw-bold mb-0">10K+</h3>
+        <small>Customers</small>
+      </div>
+    </div>
+    <div class="col-4 text-center">
+      <div class="bg-info text-white rounded-3 p-3">
+        <h3 class="fw-bold mb-0">5+</h3>
+        <small>Years</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold display-6">
+        About <span class="text-success">Orbit Foods</span>
+      </h2>
+      <div
+        class="mx-auto"
+        style="
+          width: 60px;
+          height: 4px;
+          background: #2d6a4f;
+          border-radius: 2px;
+        "
+      ></div>
+    </div>
+    <div class="row align-items-center g-4">
+      <div class="col-md-6">
+        <h4 class="fw-bold text-success">Our Story</h4>
+        <p class="text-muted">
+          Orbit Foods was founded with a simple mission — to bring the freshest,
+          highest quality food products directly from trusted sources to your
+          table. We believe that great food starts with great ingredients.
+        </p>
+        <p class="text-muted">
+          With years of experience in the food industry, we have built strong
+          relationships with farmers and suppliers across Bangladesh, ensuring
+          every product meets our strict quality standards.
+        </p>
+      </div>
+      <div class="col-md-6 text-center">
+        <div
+          class="bg-success rounded-4 d-flex align-items-center justify-content-center shadow"
+          style="height: 300px"
+        >
+          <span style="font-size: 8rem">🌾</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Featured Products ── -->
+<section id="products" class="py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold display-6">
+        Featured <span class="text-success">Products</span>
+      </h2>
+      <div
+        class="mx-auto"
+        style="
+          width: 60px;
+          height: 4px;
+          background: #2d6a4f;
+          border-radius: 2px;
+        "
+      ></div>
+      <p class="text-muted mt-2">
+        Discover our most popular quality food items
+      </p>
+    </div>
+    <div class="row g-4">
+      {% for product in featured_products %}
+      <div class="col-md-4 col-sm-6">
+        <div class="card product-card h-100 border-0 shadow-sm">
+          {% if product.image %}
+          <img
+            src="{{ product.image.url }}"
+            class="card-img-top product-img"
+            alt="{{ product.name }}"
+          />
+          {% else %}
+          <div
+            class="card-img-top product-img-placeholder d-flex align-items-center justify-content-center bg-light"
+          >
+            <span style="font-size: 4rem">🥗</span>
+          </div>
+          {% endif %}
+          <div class="card-body">
+            <span class="badge bg-success-subtle text-success mb-2"
+              >{{ product.category.name|default:"General" }}</span
+            >
+            <h5 class="card-title fw-semibold">{{ product.name }}</h5>
+            <p class="card-text text-muted small">
+              {{ product.description|truncatewords:15 }}
+            </p>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <span class="fw-bold text-success fs-5"
+                >৳{{ product.price }}</span
+              >
+              <a
+                href="{% url 'store:product_detail' product.slug %}"
+                class="btn btn-outline-success btn-sm"
+                >View Details</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center text-muted py-5">
+        <p>No products available yet. Check back soon!</p>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-5">
+      <a
+        href="{% url 'store:product_list' %}"
+        class="btn btn-success btn-lg px-5"
+      >
+        <i class="bi bi-grid me-2"></i>View All Products
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Board of Directors ── -->
+<!-- ── Board of Directors ── -->
+<section id="board" class="py-5 bg-light">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold display-6">Board of <span class="text-success">Directors</span></h2>
+      <div class="mx-auto" style="width:60px;height:4px;background:#2d6a4f;border-radius:2px;"></div>
+    </div>
+    <div class="row g-4 justify-content-center">
+
+      <div class="col-md-3 text-center">
+        <div class="card border-0 shadow-sm p-3 h-100">
+          <img src="{% static 'images/Chariman.png' %}" alt="Chairman"
+               class="rounded-circle mx-auto mb-3 d-block"
+               style="width:100px;height:100px;object-fit:cover;border:3px solid #2d6a4f;">
+          <h6 class="fw-bold mb-0">Mr. Sanjib Saha</h6>
+          <small class="text-muted">Chairman</small>
+        </div>
+      </div>
+
+      <div class="col-md-3 text-center">
+        <div class="card border-0 shadow-sm p-3 h-100">
+          <img src="{% static 'images/Vice-Chariman.png' %}" alt="Vice Chairman"
+               class="rounded-circle mx-auto mb-3 d-block"
+               style="width:100px;height:100px;object-fit:cover;border:3px solid #2d6a4f;">
+          <h6 class="fw-bold mb-0">Mr. Asish Dey</h6>
+          <small class="text-muted">Vice-Chairman</small>
+        </div>
+      </div>
+
+      <div class="col-md-3 text-center">
+        <div class="card border-0 shadow-sm p-3 h-100">
+          <img src="{% static 'images/MD.png' %}" alt="Managing Director"
+               class="rounded-circle mx-auto mb-3 d-block"
+               style="width:100px;height:100px;object-fit:cover;border:3px solid #2d6a4f;">
+          <h6 class="fw-bold mb-0">Mr. Nitai Saha</h6>
+          <small class="text-muted">Managing Director</small>
+        </div>
+      </div>
+
+      <div class="col-md-3 text-center">
+        <div class="card border-0 shadow-sm p-3 h-100">
+          <img src="{% static 'images/CTO.png' %}" alt="CTO"
+               class="rounded-circle mx-auto mb-3 d-block"
+               style="width:100px;height:100px;object-fit:cover;border:3px solid #2d6a4f;">
+          <h6 class="fw-bold mb-0">Mr. Prottoy Saha</h6>
+          <small class="text-muted">CTO</small>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Managing Team ── -->
+<!-- ── Managing Team ── -->
+<section id="team" class="py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold display-6">Managing <span class="text-success">Team</span></h2>
+      <div class="mx-auto" style="width:60px;height:4px;background:#2d6a4f;border-radius:2px;"></div>
+    </div>
+    <div class="row g-4 justify-content-center">
+
+      <div class="col-md-2 col-sm-4 text-center">
+        <div class="card border-0 shadow-sm p-3 h-100">
+          <div class="rounded-circle bg-success d-flex align-items-center justify-content-center mx-auto mb-3"
+               style="width:70px;height:70px;">
+            <span class="text-white fw-bold fs-4">M</span>
+          </div>
+          <h6 class="fw-bold mb-0 small">Mr. Mithun Sen</h6>
+          <small class="text-muted">Executive Director</small>
+        </div>
+      </div>
+
+      <div class="col-md-2 col-sm-4 text-center">
+        <div class="card border-0 shadow-sm p-3 h-100">
+          <div class="rounded-circle bg-warning d-flex align-items-center justify-content-center mx-auto mb-3"
+               style="width:70px;height:70px;">
+            <span class="text-dark fw-bold fs-4">S</span>
+          </div>
+          <h6 class="fw-bold mb-0 small">Mr. Sudip Saha</h6>
+          <small class="text-muted">Production Manager</small>
+        </div>
+      </div>
+
+      <div class="col-md-2 col-sm-4 text-center">
+        <div class="card border-0 shadow-sm p-3 h-100">
+          <div class="rounded-circle bg-info d-flex align-items-center justify-content-center mx-auto mb-3"
+               style="width:70px;height:70px;">
+            <span class="text-white fw-bold fs-4">L</span>
+          </div>
+          <h6 class="fw-bold mb-0 small">Mr. Lipon Saha</h6>
+          <small class="text-muted">Marketing Manager</small>
+        </div>
+      </div>
+
+      <div class="col-md-2 col-sm-4 text-center">
+        <div class="card border-0 shadow-sm p-3 h-100">
+          <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center mx-auto mb-3"
+               style="width:70px;height:70px;">
+            <span class="text-white fw-bold fs-4">M</span>
+          </div>
+          <h6 class="fw-bold mb-0 small">Mr. Mohiuddin</h6>
+          <small class="text-muted">RSM</small>
+        </div>
+      </div>
+
+      <div class="col-md-2 col-sm-4 text-center">
+        <div class="card border-0 shadow-sm p-3 h-100">
+          <div class="rounded-circle bg-danger d-flex align-items-center justify-content-center mx-auto mb-3"
+               style="width:70px;height:70px;">
+            <span class="text-white fw-bold fs-4">N</span>
+          </div>
+          <h6 class="fw-bold mb-0 small">Mr. Nizam Uddin</h6>
+          <small class="text-muted">RSM</small>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Contact Section ── -->
+<section id="contact" class="py-5 bg-dark text-white">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold display-6">
+        Get In <span class="text-warning">Touch</span>
+      </h2>
+      <div
+        class="mx-auto"
+        style="
+          width: 60px;
+          height: 4px;
+          background: #ffc107;
+          border-radius: 2px;
+        "
+      ></div>
+    </div>
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-4 text-center">
+        <div class="p-4 rounded-4 bg-white bg-opacity-10">
+          <i class="bi bi-envelope-fill fs-2 text-warning mb-3 d-block"></i>
+          <h6 class="fw-semibold">Email Us</h6>
+          <p class="text-muted small"><a href="mailto:orbitfoodservice@gmail.com" class="text-success">orbitfoodservice@gmail.com</a></p>
+        </div>
+      </div>
+      <div class="col-md-4 text-center">
+        <div class="p-4 rounded-4 bg-white bg-opacity-10">
+          <i class="bi bi-telephone-fill fs-2 text-warning mb-3 d-block"></i>
+          <h6 class="fw-semibold">Call Us</h6>
+          <p class="text-muted small">+880 1710475192</p>
+        </div>
+      </div>
+      <div class="col-md-4 text-center">
+        <div class="p-4 rounded-4 bg-white bg-opacity-10">
+          <i class="bi bi-geo-alt-fill fs-2 text-warning mb-3 d-block"></i>
+          <h6 class="fw-semibold">Visit Us</h6>
+          <p class="text-muted small">Cumilla, Bangladesh</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
